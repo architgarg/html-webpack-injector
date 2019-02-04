@@ -1,5 +1,3 @@
-[![npm][npm]][npm-url]
-
 <div align="center">
   <h1>HTML Webpack Injector Plugin</h1>
   <p>Plugin that simplifies injection of chunks into <b>head</b> and <b>body</b> using <a href="https://github.com/jantimon/html-webpack-plugin">HtmlWebpackPlugin</a></p>
