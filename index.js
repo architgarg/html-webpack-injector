@@ -11,7 +11,7 @@ class HtmlWebpackInjectorPlugin {
                   const bodyChunks = [];
 
                   chunks.forEach(chunk => {
-                      if (chunk.attributes.src.includes("_head")) {
+                      if (chunk.attributes.src && chunk.attributes.src.includes("_head")) {
                           headChunks.push(chunk);
                       } else {
                           bodyChunks.push(chunk);
