@@ -1,6 +1,6 @@
 {
   "name": "html-webpack-injector",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Helps to inject chunks to head and body via HtmlWebpackPlugin",
   "main": "index.js",
   "keywords": [
@@ -13,5 +13,8 @@
   ],
   "repository": "https://github.com/thearchitgarg/html-webpack-injector.git",
   "author": "Archit garg <thearchitgargg@gmail.com> (https://github.com/thearchitgarg)",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "html-webpack-plugin": "4.0.0-beta.5"
+  }
 }
