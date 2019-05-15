@@ -1,27 +1,32 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
+function getHeadAndBodyChunks(chunks) {
+  const headChunks = [];
+  const bodyChunks = [];
+
+  chunks.forEach(chunk => {
+    if (chunk.attributes.src && chunk.attributes.src.includes("_head")) {
+      headChunks.push(chunk);
+    } else {
+      bodyChunks.push(chunk);
+    }
+  });
+
+  return {headChunks, bodyChunks};
+}
+
 class HtmlWebpackInjectorPlugin {
   apply(compiler) {
     // HtmlWebpackPlugin version 4.0.0-beta.5
     if (HtmlWebpackPlugin.getHooks) {
       compiler.hooks.compilation.tap('HtmlWebpackInjectorPlugin', (compilation) => {
         HtmlWebpackPlugin.getHooks(compilation).alterAssetTagGroups.tapAsync(
-          'HtmlWebpackInjectorPlugin',
-          (data, callback) => {
-            const chunks = [...data.headTags, ...data.bodyTags];
-            const headChunks = [];
-            const bodyChunks = [];
+          'HtmlWebpackInjectorPlugin', (data, callback) => {
 
-            chunks.forEach(chunk => {
-              if (chunk.attributes.src && chunk.attributes.src.includes("_head")) {
-                headChunks.push(chunk);
-              } else {
-                bodyChunks.push(chunk);
-              }
-            });
+            const ch = getHeadAndBodyChunks([...data.headTags, ...data.bodyTags]);
 
-            data.headTags = headChunks;
-            data.bodyTags = bodyChunks;
+            data.headTags = ch.headChunks;
+            data.bodyTags = ch.bodyChunks;
 
             callback(null, data)
           }
@@ -30,21 +35,12 @@ class HtmlWebpackInjectorPlugin {
     } else {
       // HtmlWebpackPlugin version 3.2.0
       compiler.plugin("compilation", compilation => {
-        compilation.plugin("html-webpack-plugin-alter-asset-tags", object => {
-          const chunks = [...object.head, ...object.body];
-          const headChunks = [];
-          const bodyChunks = [];
+        compilation.plugin("html-webpack-plugin-alter-asset-tags", data => {
 
-          chunks.forEach(chunk => {
-            if (chunk.attributes.src.includes("_head")) {
-              headChunks.push(chunk);
-            } else {
-              bodyChunks.push(chunk);
-            }
-          });
+          const ch = getHeadAndBodyChunks([...data.head, ...data.body]);
 
-          object.head = headChunks;
-          object.body = bodyChunks;
+          data.head = ch.headChunks;
+          data.body = ch.bodyChunks;
         });
       });
     }
