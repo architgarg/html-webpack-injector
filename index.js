@@ -5,7 +5,7 @@ function getHeadAndBodyChunks(chunks) {
   const bodyChunks = [];
 
   chunks.forEach(chunk => {
-    if (chunk.attributes.src && chunk.attributes.src.includes("_head")) {
+    if ((chunk.attributes.src && chunk.attributes.src.includes("_head")) || chunk.attributes.href) {
       headChunks.push(chunk);
     } else {
       bodyChunks.push(chunk);
@@ -13,6 +13,40 @@ function getHeadAndBodyChunks(chunks) {
   });
 
   return {headChunks, bodyChunks};
+}
+
+function addAttributesToTag(tag, name, attributes) {
+  if (tag.attributes.src) {
+    const regex = new RegExp(`(\/${name}\\.)|(${name}\\.)`);
+    if (tag.attributes.src.match(regex)) {
+      tag.attributes = {...tag.attributes, ...attributes}
+    }
+  }
+}
+
+function handleChunksConfig(data, tags) {
+  if (data.plugin.options.chunksConfig) {
+    const asyncNames = data.plugin.options.chunksConfig.async;
+    const deferNames = data.plugin.options.chunksConfig.defer;
+
+    if (typeof asyncNames === "object" && typeof deferNames === "object") {
+      tags.forEach(tag => {
+        // add async/defer only on script tags.
+        if (!tag.attributes.href && tag.attributes.src) {
+          asyncNames.forEach(name => {
+            addAttributesToTag(tag, name, {async: true});
+          });
+          deferNames.forEach(name => {
+            addAttributesToTag(tag, name, {defer: true});
+          })
+        }
+      });
+    } else {
+      console.log("-------------------------------------");
+      console.error("Invalid value given to chunksConfig option");
+      console.log("-------------------------------------");
+    }
+  }
 }
 
 class HtmlWebpackInjectorPlugin {
@@ -23,10 +57,12 @@ class HtmlWebpackInjectorPlugin {
         HtmlWebpackPlugin.getHooks(compilation).alterAssetTagGroups.tapAsync(
           'HtmlWebpackInjectorPlugin', (data, callback) => {
 
-            const ch = getHeadAndBodyChunks([...data.headTags, ...data.bodyTags]);
+            const tags = [...data.bodyTags, ...data.headTags];
+            handleChunksConfig(data, tags);
+            const chunks = getHeadAndBodyChunks(tags);
 
-            data.headTags = ch.headChunks;
-            data.bodyTags = ch.bodyChunks;
+            data.headTags = chunks.headChunks;
+            data.bodyTags = chunks.bodyChunks;
 
             callback(null, data)
           }
@@ -37,10 +73,12 @@ class HtmlWebpackInjectorPlugin {
       compiler.plugin("compilation", compilation => {
         compilation.plugin("html-webpack-plugin-alter-asset-tags", data => {
 
-          const ch = getHeadAndBodyChunks([...data.head, ...data.body]);
+          const tags = [...data.body, ...data.head];
+          handleChunksConfig(data, tags);
+          const chunks = getHeadAndBodyChunks(tags);
 
-          data.head = ch.headChunks;
-          data.body = ch.bodyChunks;
+          data.head = chunks.headChunks;
+          data.body = chunks.bodyChunks;
         });
       });
     }
