@@ -1,7 +1,7 @@
 {
   "name": "html-webpack-injector",
-  "version": "1.1.1",
-  "description": "Helps to inject chunks to head and body via HtmlWebpackPlugin",
+  "version": "1.1.2",
+  "description": "Helps to inject chunks to head and body via HtmlWebpackPlugin with additional options to add async/defer to chunks",
   "main": "index.js",
   "keywords": [
     "html-webpack-injector",
@@ -9,7 +9,10 @@
     "html-webpack-plugin",
     "html",
     "webpack",
-    "html-webpack-injector-head"
+    "html-webpack-injector-head",
+    "webpack-plugins",
+    "html-webpack-plugin-async-defer",
+    "async-defer-html-webpack-plugin"
   ],
   "repository": "https://github.com/thearchitgarg/html-webpack-injector.git",
   "author": "Archit garg <thearchitgargg@gmail.com> (https://github.com/thearchitgarg)",

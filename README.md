@@ -62,3 +62,22 @@ This will generate a file `dist/index.html` containing the following
 ```
 
 You have to add `_head` in the entry point chunk name and it will be automatically injected in the head.
+
+
+<h2 align="center">Provide Async Defer (Optional)</h2>
+You can specify scripts to be async or defer by adding additional `chunksConfig` option.
+
+ ```js
+plugins: [
+    new HtmlWebpackPlugin({
+      template: "./index.html",
+      filename: "./dist/index.html",
+      chunks: ["index", "index_head"],
+      chunksConfig: {             // Added option
+        async: ["index_head"],    
+        defer: ["index"]
+      }
+    }),
+    new HtmlWebpackInjector()
+  ]
+```
