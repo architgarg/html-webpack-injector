@@ -40,7 +40,7 @@ module.exports = {
       filename: "./dist/index.html",
       chunks: ["index", "index_head"]
     }),
-    new HtmlWebpackInjector()
+    new HtmlWebpackInjector()      // Initialize plugin
   ]
 }
 ```
@@ -78,6 +78,6 @@ plugins: [
         defer: ["index"]
       }
     }),
-    new HtmlWebpackInjector()
+    new HtmlWebpackInjector()     
   ]
 ```
