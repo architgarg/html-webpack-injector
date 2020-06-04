@@ -29,22 +29,26 @@ function handleChunksConfig(data, tags) {
     const asyncNames = data.plugin.options.chunksConfig.async;
     const deferNames = data.plugin.options.chunksConfig.defer;
 
-    if (typeof asyncNames === "object" && typeof deferNames === "object") {
+    if(typeof asyncNames === "object" && asyncNames?.length){
       tags.forEach(tag => {
-        // add async/defer only on script tags.
+        // add async only on script tags.
         if (!tag.attributes.href && tag.attributes.src) {
           asyncNames.forEach(name => {
             addAttributesToTag(tag, name, {async: true});
           });
+        }
+      });
+    }
+
+    if(typeof deferNames === "object" && deferNames?.length){
+      tags.forEach(tag => {
+        // add defer only on script tags.
+        if (!tag.attributes.href && tag.attributes.src) {
           deferNames.forEach(name => {
             addAttributesToTag(tag, name, {defer: true});
           })
         }
       });
-    } else {
-      console.log("-------------------------------------");
-      console.error("Invalid value given to chunksConfig option");
-      console.log("-------------------------------------");
     }
   }
 }
