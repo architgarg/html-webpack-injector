@@ -14,7 +14,7 @@
     "html-webpack-plugin-async-defer",
     "async-defer-html-webpack-plugin"
   ],
-  "repository": "https://github.com/thearchitgarg/html-webpack-injector.git",
-  "author": "Archit garg <thearchitgargg@gmail.com> (https://github.com/thearchitgarg)",
+  "repository": "https://github.com/architgarg/html-webpack-injector.git",
+  "author": "Archit garg <thearchitgargg@gmail.com> (https://github.com/architgarg)",
   "license": "ISC"
 }
