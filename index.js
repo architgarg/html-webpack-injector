@@ -29,7 +29,7 @@ function handleChunksConfig(data, tags) {
     const asyncNames = data.plugin.options.chunksConfig.async;
     const deferNames = data.plugin.options.chunksConfig.defer;
 
-    if(typeof asyncNames === "object" && asyncNames?.length){
+    if(asyncNames && typeof asyncNames === "object" && asyncNames.length){
       tags.forEach(tag => {
         // add async only on script tags.
         if (!tag.attributes.href && tag.attributes.src) {
@@ -40,7 +40,7 @@ function handleChunksConfig(data, tags) {
       });
     }
 
-    if(typeof deferNames === "object" && deferNames?.length){
+    if(deferNames && typeof deferNames === "object" && deferNames.length){
       tags.forEach(tag => {
         // add defer only on script tags.
         if (!tag.attributes.href && tag.attributes.src) {
