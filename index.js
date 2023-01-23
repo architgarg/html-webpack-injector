@@ -28,6 +28,7 @@ function handleChunksConfig(data, tags) {
   if (data.plugin.options.chunksConfig) {
     const asyncNames = data.plugin.options.chunksConfig.async;
     const deferNames = data.plugin.options.chunksConfig.defer;
+    const removeDeferNames = data.plugin.options.chunksConfig.removeDefer;
 
     if(asyncNames && typeof asyncNames === "object" && asyncNames.length){
       tags.forEach(tag => {
@@ -46,6 +47,17 @@ function handleChunksConfig(data, tags) {
         if (!tag.attributes.href && tag.attributes.src) {
           deferNames.forEach(name => {
             addAttributesToTag(tag, name, {defer: true});
+          })
+        }
+      });
+    }
+
+    if(removeDeferNames && typeof removeDeferNames === "object" && removeDeferNames.length){
+      tags.forEach(tag => {
+        // add defer only on script tags.
+        if (!tag.attributes.href && tag.attributes.src) {
+          removeDeferNames.forEach(name => {
+            addAttributesToTag(tag, name, {defer: false});
           })
         }
       });
